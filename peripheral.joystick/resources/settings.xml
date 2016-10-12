@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="5">
+        <setting id="fixtriggers" type="bool" label="30000" default="false"/>
+	</category>
+</settings>

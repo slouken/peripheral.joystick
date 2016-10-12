@@ -23,10 +23,12 @@
 
 using namespace JOYSTICK;
 
+#define SETTING_FIX_TRIGGERS      "fixtriggers"
 #define SETTING_RETROARCH_CONFIG  "retroarchconfig"
 
 CSettings::CSettings(void)
   : m_bInitialized(false),
+    m_bFixTriggers(false),
     m_bGenerateRetroArchConfigs(false)
 {
 }
@@ -39,6 +41,11 @@ CSettings& CSettings::Get(void)
 
 void CSettings::SetSetting(const std::string& strName, const void* value)
 {
+  if (strName == SETTING_FIX_TRIGGERS)
+  {
+    m_bFixTriggers = *static_cast<const bool*>(value);
+    dsyslog("Setting \"%s\" set to %s", SETTING_FIX_TRIGGERS, m_bFixTriggers ? "true" : "false");
+  }
   if (strName == SETTING_RETROARCH_CONFIG)
   {
     m_bGenerateRetroArchConfigs = *static_cast<const bool*>(value);

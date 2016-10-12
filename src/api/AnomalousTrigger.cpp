@@ -19,6 +19,7 @@
 
 #include "AnomalousTrigger.h"
 #include "log/Log.h"
+#include "settings/Settings.h"
 
 using namespace JOYSTICK;
 
@@ -94,12 +95,16 @@ float CAnomalousTrigger::Filter(float value)
       }
     }
 
-    // Translate center to zero
-    value = value - GetCenter(m_center);
+    // Only filter if allowed in the settings
+    if (CSettings::Get().FixTriggers())
+    {
+      // Translate center to zero
+      value = value - GetCenter(m_center);
 
-    // Adjust range to lie in an interval of length 1
-    if (m_range == TRIGGER_RANGE_FULL)
-      value /= 2;
+      // Adjust range to lie in an interval of length 1
+      if (m_range == TRIGGER_RANGE_FULL)
+        value /= 2;
+    }
   }
 
   return value;

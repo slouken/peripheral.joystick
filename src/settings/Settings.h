@@ -44,13 +44,18 @@ namespace JOYSTICK
     bool IsInitialized(void) const { return m_bInitialized; }
 
     /*!
+     * \brief Fix triggers by filtering anomalous triggers
+     */
+    float FixTriggers(void) const { return m_bFixTriggers; }
+
+    /*!
      * \brief Generate .cfg files compatible with RetroArch's joypad autoconfig
      */
     bool GenerateRetroArchConfigs(void) const { return m_bGenerateRetroArchConfigs; }
 
   private:
     bool        m_bInitialized;
-    float       m_deadzone;
+    bool        m_bFixTriggers;
     bool        m_bGenerateRetroArchConfigs;
   };
 }
