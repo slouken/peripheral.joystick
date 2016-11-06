@@ -19,6 +19,7 @@
  */
 
 #include "ControllerTransformer.h"
+#include "log/Log.h"
 #include "storage/Device.h"
 #include "utils/CommonMacros.h"
 
@@ -159,6 +160,10 @@ void CControllerTransformer::TransformFeatures(const ADDON::Joystick& driverInfo
     const FeatureMap& features = featureMap.first;
     unsigned int count = featureMap.second;
 
+    dsyslog("Found %u controller transformations from %s to %s with %u features:", count, fromController.c_str(), toController.c_str(), features.size());
+    for (auto& featureTranslation : features)
+      dsyslog("    %s -> %s", featureTranslation.fromFeature.c_str(), featureTranslation.toFeature.c_str());
+
     if (count > maxCount)
     {
       maxCount = count;
@@ -168,6 +173,10 @@ void CControllerTransformer::TransformFeatures(const ADDON::Joystick& driverInfo
 
   if (bestFeatureMap != nullptr)
   {
+    dsyslog("Best transformatio with %u translations:", bestFeatureMap->size());
+    for (auto& featureTranslation : *bestFeatureMap)
+      dsyslog("    %s -> %s", featureTranslation.fromFeature.c_str(), featureTranslation.toFeature.c_str());
+
     for (const auto& featurePair : *bestFeatureMap)
     {
       const std::string& fromFeature = bSwap ? featurePair.toFeature : featurePair.fromFeature;
