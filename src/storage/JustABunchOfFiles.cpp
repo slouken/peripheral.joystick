@@ -279,11 +279,15 @@ bool CJustABunchOfFiles::ResetButtonMap(const ADDON::Joystick& driverInfo, const
   if (!m_bReadWrite)
     return false;
 
-  CDevice device(driverInfo);
+  CDevice deviceInfo(driverInfo);
 
   CLockObject lock(m_mutex);
 
-  CButtonMap* resource = m_resources.GetResource(device, false);
+  DevicePtr device = m_resources.GetDevice(deviceInfo);
+  if (device)
+    device->Configuration().Reset();
+
+  CButtonMap* resource = m_resources.GetResource(deviceInfo, false);
 
   if (resource)
     return resource->ResetButtonMap(controllerId);
