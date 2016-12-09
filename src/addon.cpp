@@ -252,14 +252,12 @@ PERIPHERAL_ERROR GetFeatures(const JOYSTICK_INFO* joystick, const char* controll
     return PERIPHERAL_ERROR_INVALID_PARAMETERS;
 
   FeatureVector featureVector;
-  if (CStorageManager::Get().GetFeatures(ADDON::Joystick(*joystick), controller_id,  featureVector))
-  {
-    *feature_count = featureVector.size();
-    ADDON::JoystickFeatures::ToStructs(featureVector, features);
-    return PERIPHERAL_NO_ERROR;
-  }
+  CStorageManager::Get().GetFeatures(ADDON::Joystick(*joystick), controller_id,  featureVector);
 
-  return PERIPHERAL_ERROR_FAILED;
+  *feature_count = featureVector.size();
+  ADDON::JoystickFeatures::ToStructs(featureVector, features);
+
+  return PERIPHERAL_NO_ERROR;
 }
 
 void FreeFeatures(unsigned int feature_count, JOYSTICK_FEATURE* features)

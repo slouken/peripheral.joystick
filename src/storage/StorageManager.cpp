@@ -112,14 +112,12 @@ void CStorageManager::Deinitialize(void)
   m_peripheralLib = nullptr;
 }
 
-bool CStorageManager::GetFeatures(const ADDON::Joystick& joystick,
+void CStorageManager::GetFeatures(const ADDON::Joystick& joystick,
                                   const std::string& strControllerId,
                                   FeatureVector& features)
 {
   if (m_buttonMapper)
     m_buttonMapper->GetFeatures(joystick, strControllerId, features);
-
-  return !features.empty();
 }
 
 bool CStorageManager::MapFeatures(const ADDON::Joystick& joystick,

@@ -74,10 +74,8 @@ namespace JOYSTICK
      * \param joystick      The device's joystick properties; unknown values may be left at their default
      * \param controller_id The controller profile being requested, e.g. game.controller.default
      * \param features      The array of features and their driver primitives
-     *
-     * \return true if results were loaded from a storage backend
      */
-    bool GetFeatures(const ADDON::Joystick& joystick,
+    void GetFeatures(const ADDON::Joystick& joystick,
                      const std::string& strDeviceId,
                      FeatureVector& features);
 
