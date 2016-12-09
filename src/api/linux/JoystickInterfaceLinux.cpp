@@ -48,7 +48,8 @@ bool CJoystickInterfaceLinux::ScanForJoysticks(JoystickVector& joysticks)
   DIR *pd = opendir(inputDir.c_str());
   if (pd == NULL)
   {
-    esyslog("%s: can't open %s (errno=%d)", __FUNCTION__, inputDir.c_str(), errno);
+    // Disabled until udev is used to grab device names
+    //esyslog("%s: can't open %s (errno=%d)", __FUNCTION__, inputDir.c_str(), errno);
     return false;
   }
 
