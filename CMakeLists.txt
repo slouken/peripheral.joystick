@@ -17,7 +17,8 @@ include_directories(${INCLUDES}
                     ${KODI_INCLUDE_DIR}
                     ${kodiplatform_INCLUDE_DIRS}
                     ${p8-platform_INCLUDE_DIRS}
-                    ${PCRE_INCLUDE_DIRS})
+                    ${PCRE_INCLUDE_DIRS}
+)
 
 set(JOYSTICK_SOURCES src/addon.cpp
                      src/api/AnomalousTrigger.cpp
@@ -123,6 +124,19 @@ if(UDEV_FOUND)
                                src/api/udev/JoystickUdev.cpp)
 
   list(APPEND DEPLIBS ${UDEV_LIBRARIES})
+endif()
+
+# --- SDL ----------------------------------------------------------------------
+
+check_include_files(SDL2/SDL.h HAVE_SDL)
+
+if(HAVE_SDL)
+  add_definitions(-DHAVE_SDL)
+
+  list(APPEND JOYSTICK_SOURCES src/api/sdl/JoystickInterfaceSDL.cpp
+                               src/api/sdl/JoystickSDL.cpp)
+else()
+  message(FATAL_ERROR "SDL2 not found") # TODO
 endif()
 
 # ------------------------------------------------------------------------------
