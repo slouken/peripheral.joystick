@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(peripheral.joystick)
+project(peripheral.joystick C CXX)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -126,17 +126,55 @@ if(UDEV_FOUND)
   list(APPEND DEPLIBS ${UDEV_LIBRARIES})
 endif()
 
-# --- SDL ----------------------------------------------------------------------
+# --- SDL2 ---------------------------------------------------------------------
 
-check_include_files(SDL2/SDL.h HAVE_SDL)
+message(STATUS "")
+message(STATUS "")
+message(STATUS "")
+message(STATUS "find_package:")
+message(STATUS "CMAKE_FIND_ROOT_PATH: ${CMAKE_FIND_ROOT_PATH}")
+message(STATUS "")
 
-if(HAVE_SDL)
+find_package(SDL2)
+message(STATUS "SDL:")
+message(STATUS "SDL2_FOUND: ${SDL2_FOUND}")
+message(STATUS "SDL2_INCLUDE_DIR: ${SDL2_INCLUDE_DIR}")
+message(STATUS "SDL2_LIBRARY: ${SDL2_LIBRARY}")
+message(STATUS "CMAKE_USE_PTHREADS_INIT: ${CMAKE_USE_PTHREADS_INIT}")
+message(STATUS "CMAKE_THREAD_LIBS_INIT: ${CMAKE_THREAD_LIBS_INIT}")
+message(STATUS "")
+
+if(SDL2_FOUND)
+  FIND_LIBRARY(PTHREAD_LIBRARY
+               NAMES pthread)
+  FIND_LIBRARY(PTHREAD_NONSHARED_LIBRARY
+               NAMES pthread_nonshared)
+
+  MESSAGE(STATUS "pthread:")
+  MESSAGE(STATUS "PTHREAD_LIBRARY is ${PTHREAD_LIBRARY}")
+  MESSAGE(STATUS "PTHREAD_NONSHARED_LIBRARY is ${PTHREAD_NONSHARED_LIBRARY}")
+  message(STATUS "")
+
+  MESSAGE(STATUS "linker:")
+  MESSAGE(STATUS "CMAKE_INSTALL_RPATH is ${CMAKE_INSTALL_RPATH}")
+  message(STATUS "CMAKE_MODULE_LINKER_FLAGS: ${CMAKE_MODULE_LINKER_FLAGS}")
+  message(STATUS "CMAKE_SHARED_LINKER_FLAGS: ${CMAKE_SHARED_LINKER_FLAGS}")
+  message(STATUS "CMAKE_STATIC_LINKER_FLAGS: ${CMAKE_STATIC_LINKER_FLAGS}")
+  message(STATUS "")
+  message(STATUS "")
+  message(STATUS "")
+
+  include_directories(${SDL2_INCLUDE_DIR})
+
   add_definitions(-DHAVE_SDL)
 
   list(APPEND JOYSTICK_SOURCES src/api/sdl/JoystickInterfaceSDL.cpp
                                src/api/sdl/JoystickSDL.cpp)
-else()
-  message(FATAL_ERROR "SDL2 not found") # TODO
+
+  list(APPEND DEPLIBS ${SDL2_LIBRARY}
+                      ${PTHREAD_LIBRARY}
+                      ${PTHREAD_NONSHARED_LIBRARY}
+  )
 endif()
 
 # ------------------------------------------------------------------------------
