@@ -3,6 +3,8 @@ project(peripheral.joystick C CXX)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+SET(CMAKE_VERBOSE_MAKEFILE ON)
+
 include(CheckIncludeFiles)
 
 # --- Add-on Dependencies ------------------------------------------------------
