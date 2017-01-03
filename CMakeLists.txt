@@ -71,6 +71,25 @@ list(APPEND DEPLIBS ${kodiplatform_LIBRARIES}
                     ${PCRE_LIBRARIES})
 add_definitions(${PCRE_DEFINITIONS})
 
+# Steam Link build only uses SDL game controller support
+if(STEAMLINK)
+
+# --- SDL2 ---------------------------------------------------------------------
+
+find_package(SDL2)
+if(SDL2_FOUND)
+  include_directories(${SDL2_INCLUDE_DIR})
+
+  add_definitions(-DHAVE_SDL)
+
+  list(APPEND JOYSTICK_SOURCES src/api/sdl/JoystickInterfaceSDL.cpp
+                               src/api/sdl/JoystickSDL.cpp)
+
+  list(APPEND DEPLIBS ${SDL2_LIBRARY})
+endif()
+
+else() # STEAMLINK
+
 # --- Cocoa --------------------------------------------------------------------
 
 if("${CORE_SYSTEM_NAME}" STREQUAL "darwin" OR "${CORE_SYSTEM_NAME}" STREQUAL "osx")
@@ -128,41 +147,7 @@ if(UDEV_FOUND)
   list(APPEND DEPLIBS ${UDEV_LIBRARIES})
 endif()
 
-# --- SDL2 ---------------------------------------------------------------------
-
-message(STATUS "")
-message(STATUS "")
-message(STATUS "")
-message(STATUS "find_package:")
-message(STATUS "CMAKE_FIND_ROOT_PATH: ${CMAKE_FIND_ROOT_PATH}")
-message(STATUS "")
-
-find_package(SDL2)
-message(STATUS "SDL:")
-message(STATUS "SDL2_FOUND: ${SDL2_FOUND}")
-message(STATUS "SDL2_INCLUDE_DIR: ${SDL2_INCLUDE_DIR}")
-message(STATUS "SDL2_LIBRARY: ${SDL2_LIBRARY}")
-message(STATUS "")
-
-if(SDL2_FOUND)
-  MESSAGE(STATUS "linker:")
-  MESSAGE(STATUS "CMAKE_INSTALL_RPATH is ${CMAKE_INSTALL_RPATH}")
-  message(STATUS "CMAKE_MODULE_LINKER_FLAGS: ${CMAKE_MODULE_LINKER_FLAGS}")
-  message(STATUS "CMAKE_SHARED_LINKER_FLAGS: ${CMAKE_SHARED_LINKER_FLAGS}")
-  message(STATUS "CMAKE_STATIC_LINKER_FLAGS: ${CMAKE_STATIC_LINKER_FLAGS}")
-  message(STATUS "")
-  message(STATUS "")
-  message(STATUS "")
-
-  include_directories(${SDL2_INCLUDE_DIR})
-
-  add_definitions(-DHAVE_SDL)
-
-  list(APPEND JOYSTICK_SOURCES src/api/sdl/JoystickInterfaceSDL.cpp
-                               src/api/sdl/JoystickSDL.cpp)
-
-  list(APPEND DEPLIBS ${SDL2_LIBRARY})
-endif()
+endif() # STEAMLINK
 
 get_cmake_property(_variableNames VARIABLES)
 foreach (_variableName ${_variableNames})
